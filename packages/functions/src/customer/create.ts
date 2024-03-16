@@ -30,9 +30,9 @@ export const main = handler(async (event) => {
         createdAt: Date.now(), // Current Unix timestamp
     },
   };
-  const messageToAdminWebSocet = {
-    action: 'sendmessage',
-    data: 'Hello World'
+  const messageToWebSocet = {
+    'action': 'sendmessage',
+    'data': 'Hello World'
   };
 /** 
   await dynamoDb.put(params);
@@ -47,7 +47,7 @@ try {
   await lambda.invoke({
     FunctionName: "dev-qms-ExampleStack-Apisendmessage758172CC-LrasHCDHW50D", // Replace with the name of your sendMessage Lambda function
     InvocationType: "RequestResponse", // Synchronous invocation
-    Payload: JSON.stringify(messageToAdminWebSocet)  // Pass the queue member data as payload
+    Payload: JSON.stringify(messageToWebSocet)  // Pass the queue member data as payload
   }).promise();
   
   return JSON.stringify(params.Item);

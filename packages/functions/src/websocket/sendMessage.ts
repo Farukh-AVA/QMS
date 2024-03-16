@@ -35,10 +35,12 @@ const TableName = Table.Connections.tableName;
 const dynamoDb = new DynamoDB.DocumentClient();
 
 export const main: APIGatewayProxyHandler = async (event) => {
+  //console.log("-----------------------------------------------")
   //const messageData = JSON.parse(event.body).data;
   //const { stage, domainName } = event.requestContext;
-  //console.log("-----------------------------------------------")
-  //console.log(domainName)
+  console.log(event)
+  console.log("-----------------------------------------------")
+  //console.log(messageData)
   //console.log(stage); 
   // Get all the connections
   const connections = await dynamoDb
@@ -54,7 +56,7 @@ export const main: APIGatewayProxyHandler = async (event) => {
     try {
       // Send the message to the given client
       await apiG
-        .postToConnection({ ConnectionId: id, Data: "Hello from sendMessage" })
+        .postToConnection({ ConnectionId: id, Data: event.data })
         .promise();
     } catch (e) {
       if (e.statusCode === 410) {
