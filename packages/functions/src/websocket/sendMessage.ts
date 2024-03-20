@@ -35,14 +35,7 @@ const TableName = Table.Connections.tableName;
 const dynamoDb = new DynamoDB.DocumentClient();
 
 export const main: APIGatewayProxyHandler = async (event) => {
-  //console.log("-----------------------------------------------")
-  //const messageData = JSON.parse(event.body).data;
-  //const { stage, domainName } = event.requestContext;
-  console.log(event)
-  console.log("-----------------------------------------------")
-  //console.log(messageData)
-  //console.log(stage); 
-  // Get all the connections
+
   const connections = await dynamoDb
     .scan({ TableName, ProjectionExpression: "id" })
     .promise();

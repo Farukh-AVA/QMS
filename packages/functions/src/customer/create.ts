@@ -2,9 +2,8 @@ import * as uuid from "uuid";
 import { Table } from "sst/node/table";
 import handler from "@websocket/core/handler";
 import dynamoDb from "@websocket/core/dynamodb";
-
-// Import the AWS SDK
 import AWS from "aws-sdk";
+
 const lambda = new AWS.Lambda();
 
 export const main = handler(async (event) => {
@@ -31,8 +30,8 @@ export const main = handler(async (event) => {
     },
   };
   const messageToWebSocet = {
-    'action': 'sendmessage',
-    'data': 'Hello World'
+   // 'action': 'sendmessage',
+    'data': type
   };
 /** 
   await dynamoDb.put(params);
