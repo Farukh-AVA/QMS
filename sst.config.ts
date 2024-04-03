@@ -3,6 +3,8 @@ import { ExampleStack } from "./stacks/ExampleStack";
 import { StorageStack } from "./stacks/StorageStack";
 import { AdminAPIStack } from "./stacks/AdminAPIStack";
 import { CustomerAPIStack } from "./stacks/CustomerAPIStack"
+import { AuthAdminStack } from "./stacks/AuthAdminStack" 
+import { AuthCustomerStack } from "./stacks/AuthCustomerStack"
 export default {
   config(_input) {
     return {
@@ -15,6 +17,8 @@ export default {
     .stack(ExampleStack)
     .stack(StorageStack)
     .stack(AdminAPIStack)
-    .stack(CustomerAPIStack); 
+    .stack(CustomerAPIStack)
+    .stack(AuthAdminStack)
+    .stack(AuthCustomerStack); 
   }
 } satisfies SSTConfig;

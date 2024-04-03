@@ -1,3 +1,9 @@
+/*
+  Call customer create API:
+  curl -X POST -H 'Content-Type: application/json' -d '{"name":"Farukh", "phoneNumber":"777-777-7777"}' https://aykgq0fr54.execute-api.us-east-1.amazonaws.com/queue
+ 
+*/
+
 import * as uuid from "uuid";
 import { Table } from "sst/node/table";
 import handler from "@websocket/core/handler";

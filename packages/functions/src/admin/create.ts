@@ -1,3 +1,10 @@
+/*
+  call Admin create API:
+  npx apig-test \  --username admin@example.com --password Passw0rd! --user-pool-id us-east-1_EmmVeu0bM --app-client-id 5ud265i2leljbnpgr0tlgjv9f --cognito-region us-east-1 --identity-pool-id us-east-1:046633ce-e3e8-4143-b894-5edf10285006 --invoke-url https://o1ys3kgnu1.execute-api.us-east-1.amazonaws.com --api-gateway-region us-east-1 --path-template /queue --method POST --body '{\"name\":\"Farukh\", \"phoneNumber\":\"777-777-7777\"}'
+  
+*/
+
+
 import * as uuid from "uuid";
 import { Table } from "sst/node/table";
 import handler from "@websocket/core/handler";
