@@ -5,7 +5,7 @@ export function CustomerAPIStack({ stack }: StackContext) {
   const { table } = use(StorageStack);
 
   // Create the API
-  const api = new Api(stack, "customerApi", {
+  const apiCustomer = new Api(stack, "customerApi", {
     defaults: {
       function: {
     //This will allow our API to access our table    
@@ -21,11 +21,11 @@ export function CustomerAPIStack({ stack }: StackContext) {
 
   // Show the API endpoint in the output
   stack.addOutputs({
-    ApiEndpoint: api.url,
+    ApiEndpoint: apiCustomer.url,
   });
 
   // Return the API resource
   return {
-    api,
+    apiCustomer,
   };
 }

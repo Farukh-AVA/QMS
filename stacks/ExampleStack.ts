@@ -2,28 +2,33 @@ import { StackContext, Table, WebSocketApi } from "sst/constructs";
 
 export function ExampleStack({ stack }: StackContext) {
   // Create the table
-  const table = new Table(stack, "Connections", {
+  const tableWebsocket = new Table(stack, "Connections", {
     fields: {
       id: "string",
     },
     primaryIndex: { partitionKey: "id" },
   });
   // Create the WebSocket API
-const api = new WebSocketApi(stack, "Api", {
-  defaults: {
-    function: {
-      bind: [table],
+  const apiWebsocket = new WebSocketApi(stack, "Api", {
+    defaults: {
+      function: {
+        bind: [tableWebsocket],
+      },
     },
-  },
-  routes: {
-    $connect: "packages/functions/src/websocket/connect.main",
-    $disconnect: "packages/functions/src/websocket/disconnect.main",
-    sendmessage: "packages/functions/src/websocket/sendMessage.main",
-  },
-});
+    routes: {
+      $connect: "packages/functions/src/websocket/connect.main",
+      $disconnect: "packages/functions/src/websocket/disconnect.main",
+      sendmessage: "packages/functions/src/websocket/sendMessage.main",
+    },
+  });
 
-// Show the API endpoint in the output
-stack.addOutputs({
-  ApiEndpoint: api.url,
-});
+  // Show the API endpoint in the output
+  stack.addOutputs({
+    ApiEndpoint: apiWebsocket.url,
+  });
+
+  return{
+    apiWebsocket, 
+  } 
+
 }
