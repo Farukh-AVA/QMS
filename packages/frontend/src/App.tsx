@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from "react-bootstrap/Navbar";
+import Routes from "./Routes.tsx";
+import QMS_Logo from "./assets/QMS_Logo.png"
+import Nav from "react-bootstrap/Nav";
+import { LinkContainer } from "react-router-bootstrap";
+import { useState, useEffect } from "react";
+import { AppContext, AppContextType } from "./lib/contextLib";
+import { useNavigate } from "react-router-dom";
+import { Auth } from "aws-amplify";
+import { onError } from "./lib/errorLib";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const nav = useNavigate();
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+  
+  async function onLoad() {
+    try {
+      await Auth.currentSession();
+      userHasAuthenticated(true);
+    }catch (error) {
+      if (error !== "No current user") {
+        onError(error);
+      }
+    }
+  
+    setIsAuthenticating(false);
+  }
+  
+  function handleLogout() {
+    userHasAuthenticated(false);
+    nav("/login");
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    !isAuthenticating && (
+      <div className="App container py-3">
+        <Navbar collapseOnSelect bg="light" expand="md" className="mb-3 px-3">
+          <LinkContainer to="/">
+            <Navbar.Brand>
+                    <img
+                      src={QMS_Logo}
+                      width="50"
+                      height="auto"
+                      alt="QMS"
+                    />
+              </Navbar.Brand>
+          </LinkContainer>  
+          <Navbar.Toggle />
+          <Navbar.Collapse className="justify-content-end">
+            <Nav activeKey={window.location.pathname}>
+              {isAuthenticated ? (
+                  <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                ) : (
+                  <>
+                    <LinkContainer to="/login">
+                        <Nav.Link>Login</Nav.Link>
+                    </LinkContainer>
+                  </>
+                )}
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <AppContext.Provider
+          value={{ isAuthenticated, userHasAuthenticated } as AppContextType}
+        >
+          <Routes />
+        </AppContext.Provider>
+
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    )  
+  );
 }
 
-export default App
+export default App;

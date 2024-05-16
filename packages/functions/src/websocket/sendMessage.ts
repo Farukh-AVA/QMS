@@ -1,5 +1,4 @@
 /**
- * Yes, the scenario you described can work for updating the admin frontend based on client registrations in the queue. Here's how it would work step by step:
 
 Client Registration:
 
