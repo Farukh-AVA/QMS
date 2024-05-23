@@ -17,6 +17,7 @@ export function AdminAPIStack({ stack }: StackContext) {
       "POST /queue": "packages/functions/src/admin/create.main",
       "GET /queue/{id}": "packages/functions/src/admin/get.main",
       "GET /queue": "packages/functions/src/admin/list.main",
+      "PUT /queue/{id}": "packages/functions/src/admin/update.main",
       "DELETE /queue/{id}": "packages/functions/src/admin/delet.main",
     },
   });

@@ -7,7 +7,6 @@ import { Auth } from "aws-amplify";
 import customerConfig  from "../CustomerConfig";
 import adminConfig from "../AdminConfig";
 import { useAppContext } from "../lib/contextLib";
-import { useNavigate } from "react-router-dom";
 import { onError } from "../lib/errorLib";
 import "./Login.css";
 
@@ -17,7 +16,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { userHasAuthenticated } = useAppContext();  
-  const nav = useNavigate();
 
   //console.log(Amplify)  
   function validateForm() {
@@ -35,9 +33,8 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         await Auth.signIn(email, password);
         const user = await Auth.currentAuthenticatedUser()
         const userType = user.attributes["custom:type"]
-        localStorage.setItem('userType', userType)
+        sessionStorage.setItem('userType', userType)
         userHasAuthenticated(true);
-        nav("/");
     } catch (error) {
       onError(error);
       setIsLoading(false);

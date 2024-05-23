@@ -1,6 +1,6 @@
 export interface MemberType {
     queueMemberId?: string;
-    name: string;
+    fullName: string;
     phoneNumber?: string;
     type?: string;
     createdAt?: string;

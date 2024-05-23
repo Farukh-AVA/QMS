@@ -10,12 +10,13 @@ import "./NewMember.css";
 
 export default function NewMember() {
   const nav = useNavigate();
-  const [name, setName] = useState("");
+  const [fullName, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const userType = sessionStorage.getItem('userType') || "";
 
   function validateForm() {
-    return name.length > 0 && phoneNumber.length == 12;
+    return fullName.length > 0 && phoneNumber.length == 12;
   }
 
   const handlePhoneNumberChange = (e) => {
@@ -38,7 +39,7 @@ export default function NewMember() {
   };
 
   function createMember(member: MemberType) {
-    return API.post("admin", "/queue", {
+    return API.post(userType, "/queue", {
       body: member,
     });
   }
@@ -50,7 +51,7 @@ export default function NewMember() {
     setIsLoading(true);
   
     try {
-      await createMember({ name, phoneNumber });
+      await createMember({ fullName, phoneNumber });
       nav("/");
     } catch (e) {
       onError(e);
@@ -65,7 +66,7 @@ export default function NewMember() {
           <Form.Control
             type="text"
             placeholder="Name"
-            value={name}
+            value={fullName}
             as="textarea"
             onChange={(e) => setName(e.target.value)}
           />

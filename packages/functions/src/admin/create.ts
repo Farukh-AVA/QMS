@@ -15,7 +15,7 @@ const lambda = new AWS.Lambda();
 
 export const main = handler(async (event) => {
   let data = {
-    name: "",
+    fullName: "",
     phoneNumber: ""
   };
   const type = "ADMIN"
@@ -30,7 +30,7 @@ export const main = handler(async (event) => {
         // The attributes of the item to be created
         queueMemberId: uuid.v1(), // A unique uuid
         //content: data.content, // Parsed from request body
-        name: data.name,
+        fullName: data.fullName,
         phoneNumber: data.phoneNumber, 
         type: type,
         createdAt: Date.now(), // Current Unix timestamp
@@ -48,12 +48,13 @@ export const main = handler(async (event) => {
     await dynamoDb.put(params);
     
     // Invoke the sendMessage Lambda function
+    
     await lambda.invoke({
       FunctionName: "dev-qms-ExampleStack-Apisendmessage758172CC-LrasHCDHW50D", // Replace with the name of your sendMessage Lambda function
       InvocationType: "RequestResponse", // Synchronous invocation
       Payload: JSON.stringify(messageToWebSocet)  // Pass the queue member data as payload
     }).promise();
-    
+     
     return JSON.stringify(params.Item);
   } catch (error) {
     console.error("Error:", error);

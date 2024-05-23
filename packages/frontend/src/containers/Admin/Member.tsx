@@ -14,7 +14,7 @@ export default function Notes() {
   const { id } = useParams();
   const nav = useNavigate();
   const [member, setMember] = useState<null | MemberType>(null);
-  const [name, setName] = useState("");
+  const [fullName, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -27,10 +27,10 @@ export default function Notes() {
     async function onLoad() {
       try {
         const member = await loadMember();
-        const { name, phoneNumber  } = member;
+        const { fullName, phoneNumber  } = member;
 
 
-        setName(name);
+        setName(fullName);
         setPhoneNumber(phoneNumber);
         setMember(member);
       } catch (e) {
@@ -42,7 +42,7 @@ export default function Notes() {
   }, [id]);
 
   function validateForm() {
-    return name.length > 0 && phoneNumber.length == 12;
+    return fullName.length > 0 && phoneNumber.length == 12;
   }
 
   const handlePhoneNumberChange = (e) => {
@@ -65,6 +65,10 @@ export default function Notes() {
       body: member,
     });
   }
+
+  function deleteNote() {
+    return API.del("admin", `/queue/${id}`, {});
+  }
   
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   
@@ -73,9 +77,8 @@ export default function Notes() {
     setIsLoading(true);
 
     try {
-    
         await saveNote({
-          name: name,
+          fullName: fullName,
           phoneNumber: phoneNumber,
         });
         nav("/");
@@ -97,6 +100,14 @@ export default function Notes() {
     }
   
     setIsDeleting(true);
+    
+    try {
+      await deleteNote();
+      nav("/");
+    } catch (e) {
+      onError(e);
+      setIsDeleting(false);
+    }
   }
   
   return (
@@ -108,7 +119,7 @@ export default function Notes() {
             <Form.Control
                 type="text"
                 placeholder="Name"
-                value={name}
+                value={fullName}
                 as="textarea"
                 onChange={(e) => setName(e.target.value)}
             />

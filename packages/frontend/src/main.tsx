@@ -11,7 +11,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 //import config from "./config.ts";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './index.css';
-const userType = localStorage.getItem('userType');
+
+const userType = sessionStorage.getItem('userType');
 
  if(userType == 'admin'){
   Amplify.configure(adminConfig)

@@ -32,7 +32,10 @@ function App() {
     setIsAuthenticating(false);
   }
   
-  function handleLogout() {
+  async function handleLogout() {
+
+    await Auth.signOut();
+    sessionStorage.removeItem('userType')
     userHasAuthenticated(false);
     nav("/login");
   }

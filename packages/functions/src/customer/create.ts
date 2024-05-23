@@ -14,7 +14,7 @@ const lambda = new AWS.Lambda();
 
 export const main = handler(async (event) => {
   let data = {
-    name: "",
+    fullName: "",
     phoneNumber: ""
   };
   const type = "CUSTOMER"
@@ -29,7 +29,7 @@ export const main = handler(async (event) => {
         // The attributes of the item to be created
         queueMemberId: uuid.v1(), // A unique uuid
         //content: data.content, // Parsed from request body
-        name: data.name,
+        fullName: data.fullName,
         phoneNumber: data.phoneNumber, 
         type: type,
         createdAt: Date.now(), // Current Unix timestamp
