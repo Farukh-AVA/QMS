@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useAppContext } from "../lib/contextLib";
 import { API } from "aws-amplify";
@@ -6,6 +6,7 @@ import { MemberType } from "../types/member";
 import { onError } from "../lib/errorLib";
 import { BsPencilSquare } from "react-icons/bs";
 import { LinkContainer } from "react-router-bootstrap";
+import adminConfig from "../AdminConfig";
 import "./Home.css";
 
 export default function Home() {
@@ -13,8 +14,10 @@ export default function Home() {
   const [members, setMembers] = useState<Array<MemberType>>([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
-  const [ws, setWs] = useState<WebSocket>();
   const userType = sessionStorage.getItem('userType') || "";
+  const socketRef = useRef<WebSocket | null>(null);
+  const websocketEndPoint = adminConfig.API.endpoints[1].endpoint;
+   
  
 
   useEffect(() => {
@@ -24,50 +27,65 @@ export default function Home() {
       }
   
       try {
-        const notes = await loadMembers();
-        setMembers(notes);
-        // Create a WebSocket connection
-        const socket = new WebSocket('wss://4wf02dowz9.execute-api.us-east-1.amazonaws.com/dev');
-        setWs(socket);
-        // Handle incoming messages
-        socket.onmessage = (event) => {
-          const message = event.data;
-          // Update state based on the message
-          if (message === 'ADMIN' || message === 'CUSTOMER') {
-            // Trigger a reload of customer data
-            reloadCustomerData();
-          }  
-        };
+        const getMembers = await loadMembers();
+        setMembers(getMembers);
 
-        // Handle WebSocket connection close
-        socket.onclose = () => {
-          console.log('WebSocket connection closed');
-        };
+        if(!socketRef.current){
+          const socket = new WebSocket(websocketEndPoint);
+          socketRef.current = socket;
 
+          socket.onopen = () => {
+            console.log('WebSocket connection opened');
+            setInterval(sendHeartbeat, 30000);
+          }
 
+          socket.onmessage = (event) => {
+            const message = event.data;
+            if (message === 'ADMIN' || message === 'CUSTOMER') {
+              reloadMembers();
+            }
+          };
+
+          socket.onclose = () => {
+            console.log('WebSocket connection closed');
+            socketRef.current = null; 
+          }    
+        }
       } catch (e) {
         onError(e);
+      } finally {
+        setIsLoading(false);
       }
-  
-      setIsLoading(false);
     }
 
-  
     onLoad();
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close();
+      }
+    } 
+
   }, [isAuthenticated]);
 
   // Function to reload customer data from the server
-  async function reloadCustomerData() {
+  async function reloadMembers() {
     try {
-      const customerData = await loadMembers();
-      setMembers(customerData);
+      const reloadMembersData = await loadMembers();
+      setMembers(reloadMembersData);
     } catch (error) {
       onError(error);
     }
   }
+
+  function sendHeartbeat() {
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      console.log('Sending heartbeat');
+      socketRef.current.send('HEARTBEAT');
+    }
+  }
   
   function loadMembers() {
-
       return API.get(userType, "/queue", {});
     
   }

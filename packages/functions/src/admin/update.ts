@@ -3,11 +3,18 @@
 import { Table } from "sst/node/table";
 import handler from "@websocket/core/handler";
 import dynamoDb from "@websocket/core/dynamodb";
+import AWS from "aws-sdk";
+const lambda = new AWS.Lambda();
 
 export const main = handler(async (event) => {
+  
   const data = JSON.parse(event.body || "{}");
-  console.log("I am here")
-  console.log("Member ID: "+event?.pathParameters?.id)
+
+  const type = "ADMIN"
+  const messageToWebSocet = {
+    'data': type
+  };
+
   const params = {
     TableName: Table.Queue.tableName,
     Key: {
@@ -28,7 +35,24 @@ export const main = handler(async (event) => {
     ReturnValues: "ALL_NEW",
   };
 
-  await dynamoDb.update(params);
+  //await dynamoDb.update(params);
 
-  return JSON.stringify({ status: true });
+  //return JSON.stringify({ status: true });
+  try {
+    // Save the queue member to DynamoDB
+    await dynamoDb.update(params);
+    
+    // Invoke the sendMessage Lambda function
+    
+    await lambda.invoke({
+      FunctionName: "dev-qms-ExampleStack-Apisendmessage758172CC-LrasHCDHW50D", // Replace with the name of your sendMessage Lambda function
+      InvocationType: "RequestResponse", // Synchronous invocation
+      Payload: JSON.stringify(messageToWebSocet)  // Pass the queue member data as payload
+    }).promise();
+     
+    return JSON.stringify({ status: true });
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
 });
