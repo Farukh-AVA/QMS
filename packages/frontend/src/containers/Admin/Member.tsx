@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import { MemberType } from "../../types/member";
 import Stack from "react-bootstrap/Stack";
 import LoaderButton from "../../components/LoaderButton";
+import Loader from "../../components/Loader.tsx";
 import "./Member.css";
 
 
@@ -112,7 +113,7 @@ export default function Notes() {
   
   return (
     <div className="Members">
-      {member && (
+      {!member ? <Loader/> : (
         <Form onSubmit={handleSubmit}>
           <Stack gap={3}>
           <Form.Group controlId="name">

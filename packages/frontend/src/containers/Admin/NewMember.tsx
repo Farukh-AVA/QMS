@@ -13,10 +13,11 @@ export default function NewMember() {
   const [fullName, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
   const userType = sessionStorage.getItem('userType') || "";
 
   function validateForm() {
-    return fullName.length > 0 && phoneNumber.length == 12;
+    return fullName.length > 0 && phoneNumber.length == 12 && consent;
   }
 
   const handlePhoneNumberChange = (e) => {
@@ -80,7 +81,14 @@ export default function NewMember() {
               onChange={handlePhoneNumberChange}
             />
         </Form.Group>
-        
+        <Form.Group controlId="consent" className="mt-3">
+          <Form.Check
+            type="checkbox"
+            label="I consent to receive SMS messages"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+          />
+        </Form.Group>
         <LoaderButton
           size="lg"
           type="submit"

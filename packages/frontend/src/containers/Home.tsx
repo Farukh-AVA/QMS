@@ -7,6 +7,7 @@ import { onError } from "../lib/errorLib";
 import { BsPencilSquare } from "react-icons/bs";
 import { LinkContainer } from "react-router-bootstrap";
 import adminConfig from "../AdminConfig";
+import Loader from "../components/Loader.tsx";
 import "./Home.css";
 
 export default function Home() {
@@ -151,16 +152,22 @@ export default function Home() {
   }
 
   function renderMembers() {
+
+    let content; 
+    
+    if(isLoading){
+      content = <Loader/>
+    }else if(userType === "admin"){
+      content = !isLoading && renderAdminMembersList(members)
+    }else{
+      content = !isLoading && renderCustomerMembersList(members)
+    }
+
     return (
       <div className="members">
         <h2 className="pb-3 mt-4 mb-3 border-bottom">Queue Members</h2>
         <ListGroup>
-          {
-            userType === "admin" ?
-            !isLoading && renderAdminMembersList(members) :
-            !isLoading && renderCustomerMembersList(members)
-          }
-        
+          {content}
         </ListGroup>
       </div>
     );
