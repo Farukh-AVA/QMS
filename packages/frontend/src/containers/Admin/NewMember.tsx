@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, { useState, ChangeEvent  } from "react";
 import Form from "react-bootstrap/Form";
 import {useNavigate} from "react-router-dom";
 import LoaderButton from "../../components/LoaderButton";
@@ -20,7 +20,7 @@ export default function NewMember() {
     return fullName.length > 0 && phoneNumber.length == 12 && consent;
   }
 
-  const handlePhoneNumberChange = (e) => {
+  const handlePhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value;
     
     // Remove all non-digit characters from the input
@@ -33,7 +33,7 @@ export default function NewMember() {
     setPhoneNumber(formattedNumber);
   };
   
-  const formatPhoneNumber = (phoneNumber) => {
+  const formatPhoneNumber = (phoneNumber: string) => {
     // Apply custom formatting logic to the phone number
     // For example, you can format it as 'XXX-XXX-XXXX'
     return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');

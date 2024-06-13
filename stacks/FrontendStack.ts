@@ -1,18 +1,14 @@
 import { StackContext, StaticSite, use } from "sst/constructs";
-//import { ApiStack } from "./ApiStack";
 import { AdminAPIStack } from "./AdminAPIStack";
 import { CustomerAPIStack } from "./CustomerAPIStack";
-//import { AuthStack } from "./AuthStack";
 import { AuthAdminStack } from "./AuthAdminStack";
 import { AuthCustomerStack } from "./AuthCustomerStack";
 import { StorageStack } from "./StorageStack";
 import { ExampleStack } from "./ExampleStack"
 
 export function FrontendStack({ stack, app }: StackContext) {
-  //const { api } = use(ApiStack);
   const { api } = use(AdminAPIStack);
   const { apiCustomer } = use(CustomerAPIStack);
-  //const { auth } = use(AuthStack);
   const { auth } = use(AuthAdminStack);
   const { authCustomer } = use(AuthCustomerStack);
   const { table } = use(StorageStack);

@@ -18,6 +18,7 @@ export default function Home() {
   const userType = sessionStorage.getItem('userType') || "";
   const socketRef = useRef<WebSocket | null>(null);
   const websocketEndPoint = adminConfig.API.endpoints[1].endpoint;
+  const sortedMembers = members.sort((a,b) => Number(a.createdAt) - Number(b.createdAt)); 
    
  
 
@@ -36,7 +37,6 @@ export default function Home() {
           socketRef.current = socket;
 
           socket.onopen = () => {
-            console.log('WebSocket connection opened');
             setInterval(sendHeartbeat, 30000);
           }
 
@@ -48,7 +48,6 @@ export default function Home() {
           };
 
           socket.onclose = () => {
-            console.log('WebSocket connection closed');
             socketRef.current = null; 
           }    
         }
@@ -81,7 +80,6 @@ export default function Home() {
 
   function sendHeartbeat() {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      console.log('Sending heartbeat');
       socketRef.current.send('HEARTBEAT');
     }
   }
@@ -158,9 +156,9 @@ export default function Home() {
     if(isLoading){
       content = <Loader/>
     }else if(userType === "admin"){
-      content = !isLoading && renderAdminMembersList(members)
+      content = !isLoading && renderAdminMembersList(sortedMembers)
     }else{
-      content = !isLoading && renderCustomerMembersList(members)
+      content = !isLoading && renderCustomerMembersList(sortedMembers)
     }
 
     return (

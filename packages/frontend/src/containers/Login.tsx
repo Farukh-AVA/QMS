@@ -16,8 +16,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { userHasAuthenticated } = useAppContext();  
-
-  //console.log(Amplify)  
+ 
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
@@ -33,6 +32,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         await Auth.signIn(email, password);
         const user = await Auth.currentAuthenticatedUser()
         const userType = user.attributes["custom:type"]
+        console.log(userType) 
         sessionStorage.setItem('userType', userType)
         userHasAuthenticated(true);
     } catch (error) {

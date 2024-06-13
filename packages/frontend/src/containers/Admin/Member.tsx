@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { API } from "aws-amplify";
 import { onError } from "../../lib/errorLib";
-import config from "../../config";
 import Form from "react-bootstrap/Form";
 import { MemberType } from "../../types/member";
 import Stack from "react-bootstrap/Stack";
@@ -16,9 +15,10 @@ export default function Notes() {
   const nav = useNavigate();
   const [member, setMember] = useState<null | MemberType>(null);
   const [fullName, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isMessaging, setIsMessaging] = useState(false);
 
   useEffect(() => {
     function loadMember() {
@@ -46,7 +46,7 @@ export default function Notes() {
     return fullName.length > 0 && phoneNumber.length == 12;
   }
 
-  const handlePhoneNumberChange = (e) => {
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value;
     
     input = input.replace(/\D/g, '');
@@ -56,7 +56,7 @@ export default function Notes() {
     setPhoneNumber(formattedNumber);
   };
   
-  const formatPhoneNumber = (phoneNumber) => {
+  const formatPhoneNumber = (phoneNumber: string) => {
     
     return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
   };
@@ -69,6 +69,12 @@ export default function Notes() {
 
   function deleteNote() {
     return API.del("admin", `/queue/${id}`, {});
+  }
+
+  function messageMember() {
+    return API.post("admin", `/message`, {
+      body: member,
+    });
   }
   
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -110,6 +116,22 @@ export default function Notes() {
       setIsDeleting(false);
     }
   }
+
+  async function handleMessage(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+  
+
+  
+    setIsMessaging(true);
+    
+    try {
+      await messageMember();
+      nav("/");
+    } catch (e) {
+      onError(e);
+      setIsMessaging(false);
+    }
+  }
   
   return (
     <div className="Members">
@@ -134,10 +156,10 @@ export default function Notes() {
               onChange={handlePhoneNumberChange}
             />
         </Form.Group>
-
             <Stack gap={1}>
               <LoaderButton
                 size="lg"
+                //variant="outline-primary"
                 type="submit"
                 isLoading={isLoading}
                 disabled={!validateForm()}
@@ -146,11 +168,19 @@ export default function Notes() {
               </LoaderButton>
               <LoaderButton
                 size="lg"
-                variant="danger"
+                //variant="outline-danger"
                 onClick={handleDelete}
                 isLoading={isDeleting}
               >
                 Delete
+              </LoaderButton>
+              <LoaderButton
+                size="lg"
+                //variant="outline-warning"
+                onClick={handleMessage}
+                isLoading={isMessaging}
+              >
+                Send Message
               </LoaderButton>
             </Stack>
           </Stack>

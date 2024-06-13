@@ -40,25 +40,28 @@ export const main = handler(async (event) => {
      'data': type
    };
 
-//  await dynamoDb.put(params);
+  //await dynamoDb.put(params);
 
-//  return JSON.stringify(params.Item);
-  try {
+  //return JSON.stringify(params.Item);
+ 
+try {
     // Save the queue member to DynamoDB
     await dynamoDb.put(params);
     
     // Invoke the sendMessage Lambda function
-    
+  
     await lambda.invoke({
-      FunctionName: "dev-qms-ExampleStack-Apisendmessage758172CC-LrasHCDHW50D", // Replace with the name of your sendMessage Lambda function
+      //FunctionName: "dev-qms-ExampleStack-Apisendmessage758172CC-LrasHCDHW50D", // Replace with the name of your sendMessage Lambda function
+      FunctionName: "prod-qms-ExampleStack-Apisendmessage758172CC-Zav4UkNq10XO", 
       InvocationType: "RequestResponse", // Synchronous invocation
       Payload: JSON.stringify(messageToWebSocet)  // Pass the queue member data as payload
     }).promise();
-     
+   
     return JSON.stringify(params.Item);
   } catch (error) {
     console.error("Error:", error);
     throw error;
   }
+   
 });
 

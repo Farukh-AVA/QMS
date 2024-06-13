@@ -1,5 +1,6 @@
 import { Api, Config, StackContext, use } from "sst/constructs";
 import { StorageStack } from "./StorageStack";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 export function AdminAPIStack({ stack }: StackContext) {
   const { table } = use(StorageStack);
@@ -9,8 +10,7 @@ export function AdminAPIStack({ stack }: StackContext) {
     defaults: {
       function: {
     //This will allow our API to access our table    
-        bind: [table],
-        
+        bind: [table]
       },
     },
     routes: {
