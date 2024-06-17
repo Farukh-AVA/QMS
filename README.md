@@ -25,7 +25,7 @@ The Queue Management System (QMS) is a comprehensive application designed to man
     - AWS Cognito: Manages authentication and authorization.
 4. ### Backend Architecture Diagram
 <p align="center">
-   <img src="https://github.com/Farukh-AVA/QMS/blob/main/packages/frontend/src/assets/AWS%20QMS%20Diagram.pdf"  width=500><br>
+   <img src="https://github.com/Farukh-AVA/QMS/blob/main/packages/frontend/src/assets/AWS%20QMS%20Diagram%20(1).pdf"  width=500><br>
 </p>
 
 5. ### Communication:
