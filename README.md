@@ -63,7 +63,7 @@ The Queue Management System (QMS) is a comprehensive application designed to man
 
 1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/yourusername/qms.git
+    git clone https://github.com/farukh-ava/qms.git
     cd qms
     ```
 
@@ -100,22 +100,6 @@ The Queue Management System (QMS) is a comprehensive application designed to man
     ```bash
     npx sst deploy --stage prod
     ```
-
-## Visuals
-
-
-
-### User Flow Diagram
-
-![User Flow](path/to/user-flow-diagram.png)
-
-### Admin Interface
-
-![Admin Interface](path/to/admin-interface-screenshot.png)
-
-### Customer Interface
-
-![Customer Interface](path/to/customer-interface-screenshot.png)
 
 ### Contributions
 Contributions are welcome! Please submit a pull request or open an issue to discuss any changes.
