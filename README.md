@@ -24,10 +24,11 @@ The Queue Management System (QMS) is a comprehensive application designed to man
     - AWS SNS & Amazon Pinpoint: Handles messaging.
     - AWS Cognito: Manages authentication and authorization.
 4. ### Backend Architecture Diagram
+<p align="center">
+   <img src="https://github.com/Farukh-AVA/QMS/blob/main/packages/frontend/src/assets/AWS%20QMS%20Diagram.pdf"  width=500><br>
+</p>
 
-![QMS Architecture](https://github.com/Farukh-AVA/QMS/blob/main/packages/frontend/src/assets/AWS%20QMS%20Diagram.pdf)
-
-5. **Communication**:
+5. ### Communication:
     - WebSocket: Facilitates real-time updates between admin and customers.
 
 ### Workflow
