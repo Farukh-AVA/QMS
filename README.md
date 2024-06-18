@@ -17,12 +17,12 @@ The Queue Management System (QMS) is a comprehensive application designed to man
     - Customer Interface: Allows customers to register and view the queue.
 
 3. **Backend**:
-     -SST local development and infrastructure as a Code IaC. 
     - AWS Lambda Functions: Handle the business logic.
     - AWS API Gateway: Provides endpoints for interacting with the backend.
     - AWS DynamoDB: Stores queue data.
     - AWS SNS & Amazon Pinpoint: Handles messaging.
     - AWS Cognito: Manages authentication and authorization.
+    - SST: Local development and infrastructure as a Code IaC. 
 4. ### Backend Architecture Diagram
 <p align="center">
    <img src="https://github.com/Farukh-AVA/QMS/blob/main/packages/frontend/src/assets/AWS%20QMS%20Diagram.png"
