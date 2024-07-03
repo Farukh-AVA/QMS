@@ -13,7 +13,8 @@ export const main = handlere(async (event) => {
     var message = "";
     var phoneNumber = ""; 
     const originationNumber = process.env.ORIGINATION_NUMBER;
-    const destinationNumber = process.env.DESTINATION_NUMBER || "";
+    //const destinationNumber = process.env.DESTINATION_NUMBER || "";
+    var destinationNumber = ""; 
     const applicationId = process.env.APPLICATION_ID;
     const messageType = process.env.MESSAGE_TYPE;
 
@@ -24,7 +25,8 @@ export const main = handlere(async (event) => {
     if (event.body != null) {
         const data = JSON.parse(event.body);
         message = "Hey "+data.fullName+" you are next in the queue.";
-        phoneNumber  = data.phoneNumber 
+        let phoneNumber  = data.phoneNumber
+        destinationNumber = phoneNumber.replace(/^(\d{3})-(\d{3})-(\d{4})$/, '+1$1$2$3'); 
     }
 
     
